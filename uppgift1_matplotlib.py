@@ -14,3 +14,23 @@ dataframes = [pd.read_excel(file, sheet_name=sheet) for sheet in arc_name]
 
 # Subjects (Headings)
 subjects = ["English", "Math", "SWedish", "Swedish as secondlanguage"]
+
+# Rename sheets to match all
+for df in dataframes:
+    df.columns = [
+        "Region",
+        "Operator",
+        "Total (A-F)",
+        "Girls (A-F)",
+        "Boys (A-F)",
+        "Total (A-E)",
+        "Girls (A-E)",
+        "Boys (A-E)",
+        "Total (points)",
+        "Girls (points)",
+        "Boys (points)",
+    ]
+
+# Create subplot
+fig, axs = plt.subplots(2, 2, figsize=(14, 10))
+axs = axs.ravel()
