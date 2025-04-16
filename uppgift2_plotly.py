@@ -46,3 +46,37 @@ fig.update_layout(
 # Save HTML
 fig.write_html("visualisations/uppgift2a_missing_grades.html")
 fig.show()
+
+# Merit for students 2018-23
+fig2 = go.Figure()
+
+fig2.add_trace(go.Scatter(
+    x=df["Läsår"],
+    y=df["Meritvärde 16 ämnen Totalt"],
+    mode='lines+markers',
+    name='Total'
+))
+
+fig2.add_trace(go.Scatter(
+    x=df["Läsår"],
+    y=df["Meritvärde 16 ämnen Flickor"],
+    mode='lines+markers',
+    name='Girls'
+))
+
+fig2.add_trace(go.Scatter(
+    x=df["Läsår"],
+    y=df["Meritvärde 16 ämnen Pojkar"],
+    mode='lines+markers',
+    name='Boys'
+))
+
+fig2.update_layout(
+    title="Merit Value (16 Subjects), 2018–2023",
+    xaxis_title="School Year",
+    yaxis_title="Points",
+    template="plotly_white"
+)
+
+fig2.write_html("visualisations/uppgift2b_merit_value.html")
+fig2.show()
