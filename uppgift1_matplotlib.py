@@ -38,13 +38,26 @@ axs = axs.ravel()
 # Gå igenom varje ämne och rita stapeldiagram
 for i, df in enumerate(dataframes):
     # Rensa bort rader med saknade eller ogiltiga värden
-    df_clean = df.dropna(subset=["Operator", "Total (points)"])
+    df_clean = df.dropna(subset=["Operator", "Total (points)"].copy())
 
     # Filtrera bort icke-strängar (ibland är float med som 'Operator')
-    df_clean = df_clean[df_clean["Operator"].apply(lambda x: isinstance(x, str))]
+    df_clean["Operator"] = df_clean["Operator"].astype(str)
 
-    operators = df_clean["Operator"].tolist()
-    points = df_clean["Total (points)"].tolist()
+    # Ta bort rader som innehåller "nan" eller är rubriker
+    df_clean = df_clean[~df_clean["Operator"].str.contains("nan", case=False)]
+    df_clean = df_clean[~df_clean["Operator"].str.contains("Typ av huvudman", case=False)]
+
+    df_clean["Total (points)"] = pd.to_numeric(df_clean["Total (points)"], errors="coerce")
+
+    df_clean = df_clean.dropna(subset=["Total (points)"])
+    operators = df_clean["Operator"]
+    points = df_clean["Total (points)"]
+
+
+    print(f"Ämne: {subjects[i]}")
+    print("Operatorer:", operators.tolist())
+    print("Poäng:", points.tolist())
+    print("Antal operatorer:", len(operators), "Antal poäng:", len(points))
 
     axs[i].bar(operators, points, color='skyblue')
     axs[i].set_title(f"Total points per Operator – {subjects[i]}")
@@ -58,4 +71,5 @@ plt.tight_layout()
 plt.savefig("visualiseringar/uppgift1_total_points_by_subject.png")
 plt.show()
 
-## Får det inte att fungera och jag vet inte hur jag ska göra tbh
+
+
